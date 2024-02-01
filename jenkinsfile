@@ -7,7 +7,7 @@ pipeline{
     stages {
         stage('Docker Build') {
             steps{
-                sh ''' docker build -t sdnath/simple-nodeapp-sd:dev'''
+                sh ''' docker build -t sdnath/simple-nodeapp-sd:dev .'''
             }
         }
         stage('Docker Login') {
