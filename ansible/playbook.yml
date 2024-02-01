@@ -1,0 +1,11 @@
+---
+- name: "Sample Node container"
+  hosts: localhost
+  connection: local # this is required if running playbook on localhost
+  tasks:
+    - name: Deploy node app container
+      docker_container:
+        name: nodeapp
+        image: sample-nodeapp:dev
+        ports:
+          - "3000:3000"
