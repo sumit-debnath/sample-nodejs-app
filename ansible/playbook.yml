@@ -6,6 +6,6 @@
     - name: Deploy node app container
       docker_container:
         name: nodeapp
-        image: sample-nodeapp:dev
+        image: sdnath/simple-nodeapp-sd:dev
         ports:
           - "3000:3000"

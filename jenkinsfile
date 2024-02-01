@@ -1,0 +1,29 @@
+pipeline{
+    agent any
+    // environment {
+    //     DOCKERHUB_CREDENTIALS = credentials('sumit-dockerhub')
+    // } 
+
+    stages {
+        stage('Docker Build') {
+            steps{
+                sh ''' docker build -t sdnath/simple-nodeapp-sd:dev'''
+            }
+        }
+        stage('Docker Login') {
+            steps{
+                sh ''' docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'''
+            }
+        }
+        stage('Docker Push') {
+            steps {
+                sh '''docker push sdnath/simple-nodeapp-sd:dev'''
+            }
+        }
+        stage('Deploy') {
+            steps {
+                ansiblePlaybook playbook: 'ansible/playbook.yml', vaultTmpPath: ''
+            }
+        }
+    }
+}
