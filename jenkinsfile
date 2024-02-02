@@ -31,7 +31,7 @@ pipeline{
                         // sh ''' docker build -t ${IMAGE_NAME}:${currentBuild.number} .'''
                     } else {
                         // sh ''' docker build -t ${IMAGE_NAME}:${params.Image_Tag} .'''
-                        echo "Parameter Value: ${params.myParameter}"
+                        echo "Parameter Value: ${params.Image_Tag}"
                     }
                 }
             }
