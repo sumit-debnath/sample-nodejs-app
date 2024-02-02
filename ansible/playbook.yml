@@ -3,7 +3,7 @@
   hosts: localhost
   connection: local # this is required if running playbook on localhost
   vars:
-    image: "{{ lookup('env', 'IMAGE_NAME') | default('Guest') }}"
+    IMAGE_NAME: "{{ lookup('env', 'IMAGE_NAME') | default('Guest') }}"
   tasks:
     - name: Deploy node app container
       docker_container:
