@@ -2,10 +2,12 @@
 - name: "Sample Node container"
   hosts: localhost
   connection: local # this is required if running playbook on localhost
+  vars:
+    username: "{{ lookup('env', 'IMAGE_NAME') | default('Guest') }}"
   tasks:
     - name: Deploy node app container
       docker_container:
         name: nodeapp
-        image: sdnath/simple-nodeapp-sd:dev
+        image: {{ IMAGE_NAME }}
         ports:
           - "3000:3000"
