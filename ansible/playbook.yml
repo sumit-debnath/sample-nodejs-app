@@ -8,6 +8,8 @@
     - name: Deploy node app container
       docker_container:
         name: nodeapp
-        image: "{{ image }}"
+        image: "{{ IMAGE_NAME }}"
+        state: started
+        pull: always
         ports:
           - "3000:3000"
