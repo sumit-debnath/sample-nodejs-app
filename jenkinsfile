@@ -27,48 +27,43 @@ pipeline{
             steps{
                 script {
                     if (params.Image_Tag == '') {
-                        echo "Build Number: ${currentBuild.number}"
-                        // sh "docker build -t ${IMAGE_NAME}:${currentBuild.number} ."
+                        // echo "Build Number: ${currentBuild.number}"
+                        sh "docker build -t ${IMAGE_NAME}:${currentBuild.number} ."
                         NEW_IMAGE_NAME = "${IMAGE_NAME}:${currentBuild.number}"
                     } else {
-                        // sh "docker build -t ${IMAGE_NAME}:${params.Image_Tag} ."
-                        echo "Parameter Value: ${params.Image_Tag}"
+                        sh "docker build -t ${IMAGE_NAME}:${params.Image_Tag} ."
+                        // echo "Parameter Value: ${params.Image_Tag}"
                         NEW_IMAGE_NAME = "${IMAGE_NAME}:${params.Image_Tag}"
                     }
                 }
             }
         }
-        stage('IMAGE NAME TEST'){
-            steps{
-                echo "${NEW_IMAGE_NAME}"
+        stage('Trivy Scan') {
+            steps {
+                // sh "trivy --no-progress --exit-code 1 --severity HIGH,CRITICAL ${NEW_IMAGE_NAME}"
+                sh "trivy --no-progress --severity HIGH,CRITICAL ${NEW_IMAGE_NAME}"
+                
             }
         }
-        // stage('Trivy Scan') {
-        //     steps {
-        //         // sh 'trivy --no-progress --exit-code 1 --severity HIGH,CRITICAL sdnath/simple-nodeapp-sd:dev'
-        //         sh 'trivy --no-progress --severity HIGH,CRITICAL sdnath/simple-nodeapp-sd:dev'
-                
-        //     }
-        // }
-        // stage('Docker Login') {
-        //     steps{
-        //         sh ''' echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'''
-        //     }
-        // }
-        // stage('Docker Push') {
-        //     steps {
-        //         sh '''docker push sdnath/simple-nodeapp-sd:dev'''
-        //     }
-        // }
+        stage('Docker Login') {
+            steps{
+                sh ''' echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'''
+            }
+        }
+        stage('Docker Push') {
+            steps {
+                sh "docker push ${NEW_IMAGE_NAME}"
+            }
+        }
         // stage('Deploy') {
         //     steps {
         //         ansiblePlaybook playbook: 'ansible/playbook.yml', vaultTmpPath: ''
         //     }
         // }
     }
-    // post {
-    //     always {
-    //         sh 'docker logout'
-    //     }
-    // }
+    post {
+        always {
+            sh 'docker logout'
+        }
+    }
 }
