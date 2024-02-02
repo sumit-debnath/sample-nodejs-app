@@ -7,6 +7,11 @@ pipeline{
         string defaultValue: 'main', name: 'Branch'
     }
     stages {
+        stage('Clean WS') {
+            steps{
+                cleanWS()
+            }
+        }
         stage('Git Checkout'){
             steps{
                 git branch: '$Branch', url: 'https://github.com/sumit-debnath/sample-nodejs-app.git'
