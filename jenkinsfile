@@ -1,10 +1,16 @@
 pipeline{
     agent any
+    options {
+        buildDiscarder logRotator(numToKeepStr: '3')
+    }
     environment {
         DOCKERHUB_CREDENTIALS = credentials('sumit-dockerhub')
+        IMAGE_NAME = 'sdnath/simple-nodeapp-sd'
     } 
     parameters{
         string defaultValue: 'main', name: 'Branch'
+        string defaultValue: '', name: 'Image_Tag'
+        
     }
     stages {
         stage('Clean WS') {
@@ -17,11 +23,17 @@ pipeline{
                 git branch: '$Branch', url: 'https://github.com/sumit-debnath/sample-nodejs-app.git'
             }
         }
-        // stage('Docker Build') {
-        //     steps{
-        //         sh ''' docker build -t sdnath/simple-nodeapp-sd:dev .'''
-        //     }
-        // }
+        stage('Docker Build') {
+            steps{
+                script {
+                    if (param.Image_Tag == null) {
+                        sh ''' docker build -t ${IMAGE_NAME}:${currentBuild.number} .'''
+                    } else {
+                        sh ''' docker build -t ${IMAGE_NAME}:${params.Image_Tag} .'''
+                    }
+                }
+            }
+        }
         // stage('Trivy Scan') {
         //     steps {
         //         // sh 'trivy --no-progress --exit-code 1 --severity HIGH,CRITICAL sdnath/simple-nodeapp-sd:dev'
