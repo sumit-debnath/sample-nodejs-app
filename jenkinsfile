@@ -26,7 +26,7 @@ pipeline{
         stage('Docker Build') {
             steps{
                 script {
-                    if (param.Image_Tag == null) {
+                    if (params.Image_Tag == null) {
                         sh ''' docker build -t ${IMAGE_NAME}:${currentBuild.number} .'''
                     } else {
                         sh ''' docker build -t ${IMAGE_NAME}:${params.Image_Tag} .'''
