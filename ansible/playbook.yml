@@ -10,6 +10,5 @@
         name: nodeapp
         image: "{{ IMAGE_NAME }}"
         state: started
-        pull: always
         ports:
           - "3000:3000"
