@@ -7,7 +7,12 @@ pipeline{
     stages {
         stage('Docker Build') {
             steps{
-                sh ''' docker build -t simple-nodeapp-sd:dev .'''
+                sh ''' docker build -t sdnath/simple-nodeapp-sd:dev .'''
+            }
+        }
+        stage('Trivy Scan') {
+            steps {
+                sh 'trivy --no-progress --exit-code 1 --severity MEDIUM,HIGH,CRITICAl sdnath/simple-nodeapp-sd:dev'
             }
         }
         stage('Docker Login') {
