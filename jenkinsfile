@@ -28,12 +28,12 @@ pipeline{
                 script {
                     if (params.Image_Tag == '') {
                         // echo "Build Number: ${currentBuild.number}"
-                        sh "docker build -t ${IMAGE_NAME}:${currentBuild.number} ."
-                        NEW_IMAGE_NAME = "${IMAGE_NAME}:${currentBuild.number}"
+                        NEW_IMAGE_NAME = "${IMAGE_NAME}:dev_${currentBuild.number}"
+                        sh "docker build -t ${NEW_IMAGE_NAME} ."
                     } else {
-                        sh "docker build -t ${IMAGE_NAME}:${params.Image_Tag} ."
-                        // echo "Parameter Value: ${params.Image_Tag}"
                         NEW_IMAGE_NAME = "${IMAGE_NAME}:${params.Image_Tag}"
+                        sh "docker build -t ${NEW_IMAGE_NAME} ."
+                        // echo "Parameter Value: ${params.Image_Tag}"
                     }
                 }
             }
@@ -59,6 +59,19 @@ pipeline{
             steps {
                 // ansiblePlaybook playbook: 'ansible/playbook.yml', vaultTmpPath: ''
                 ansiblePlaybook extras: "-e 'IMAGE_NAME= ${NEW_IMAGE_NAME}'", playbook: 'ansible/playbook.yml'
+            }
+        }
+        // Testing Image removal from local
+        stage('Remove Old Docker Images') {
+            steps {
+                script {
+                    def imagesToRemove = sh(script: 'docker images --format "{{.ID}} {{.Repository}}:{{.Tag}}"', returnStdout: true).trim().split('\n')
+                    imagesToRemove.each { image ->
+                        if (!image.contains(NEW_IMAGE_NAME)) {
+                            sh "docker rmi -f $image"
+                        }
+                    }
+                }
             }
         }
     }
