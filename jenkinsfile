@@ -58,7 +58,7 @@ pipeline{
         stage('Deploy') {
             steps {
                 // ansiblePlaybook playbook: 'ansible/playbook.yml', vaultTmpPath: ''
-                ansiblePlaybook extras: "-e IMAGE_NAME= ${NEW_IMAGE_NAME}", playbook: 'ansible/playbook.yml'
+                ansiblePlaybook extras: "-e 'IMAGE_NAME= ${NEW_IMAGE_NAME}'", playbook: 'ansible/playbook.yml'
             }
         }
     }
