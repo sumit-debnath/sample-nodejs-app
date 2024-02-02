@@ -27,9 +27,11 @@ pipeline{
             steps{
                 script {
                     if (params.Image_Tag == null) {
-                        sh ''' docker build -t ${IMAGE_NAME}:${currentBuild.number} .'''
+                        echo "Build Number: ${currentBuild.number}"
+                        // sh ''' docker build -t ${IMAGE_NAME}:${currentBuild.number} .'''
                     } else {
-                        sh ''' docker build -t ${IMAGE_NAME}:${params.Image_Tag} .'''
+                        // sh ''' docker build -t ${IMAGE_NAME}:${params.Image_Tag} .'''
+                        echo "Parameter Value: ${params.myParameter}"
                     }
                 }
             }
