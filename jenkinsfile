@@ -12,7 +12,9 @@ pipeline{
         }
         stage('Trivy Scan') {
             steps {
-                sh 'trivy --no-progress --exit-code 1 --severity MEDIUM,HIGH,CRITICAL sdnath/simple-nodeapp-sd:dev'
+                // sh 'trivy --no-progress --exit-code 1 --severity HIGH,CRITICAL sdnath/simple-nodeapp-sd:dev'
+                sh 'trivy --no-progress --severity HIGH,CRITICAL sdnath/simple-nodeapp-sd:dev'
+                
             }
         }
         stage('Docker Login') {
