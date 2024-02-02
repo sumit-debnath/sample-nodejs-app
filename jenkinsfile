@@ -55,11 +55,12 @@ pipeline{
                 sh "docker push ${NEW_IMAGE_NAME}"
             }
         }
-        // stage('Deploy') {
-        //     steps {
-        //         ansiblePlaybook playbook: 'ansible/playbook.yml', vaultTmpPath: ''
-        //     }
-        // }
+        stage('Deploy') {
+            steps {
+                // ansiblePlaybook playbook: 'ansible/playbook.yml', vaultTmpPath: ''
+                ansiblePlaybook extras: '-e "IMAGE_NAME= ${NEW_IMAGE_NAME}"', playbook: 'ansible/playbook.yml'
+            }
+        }
     }
     post {
         always {
