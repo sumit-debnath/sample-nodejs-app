@@ -3,11 +3,11 @@
   hosts: localhost
   connection: local # this is required if running playbook on localhost
   vars:
-    username: "{{ lookup('env', 'IMAGE_NAME') | default('Guest') }}"
+    image: "{{ lookup('env', 'IMAGE_NAME') | default('Guest') }}"
   tasks:
     - name: Deploy node app container
       docker_container:
         name: nodeapp
-        image: "{{ IMAGE_NAME }}"
+        image: "{{ image }}"
         ports:
           - "3000:3000"
