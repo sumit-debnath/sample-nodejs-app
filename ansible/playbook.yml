@@ -5,9 +5,9 @@
   vars:
     IMAGE_NAME: "{{ lookup('env', 'IMAGE_NAME') | default('Guest') }}"
   tasks:
-    - name: Print Hello Message
-      debug:
-        msg: "Hello, {{ IMAGE_NAME }}!"
+    # - name: Print Hello Message
+    #   debug:
+    #     msg: "Hello, {{ IMAGE_NAME }}!"
 
     - name: Deploy node app container
       docker_container:
