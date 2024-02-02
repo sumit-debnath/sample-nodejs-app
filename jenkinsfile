@@ -28,12 +28,19 @@ pipeline{
                 script {
                     if (params.Image_Tag == '') {
                         echo "Build Number: ${currentBuild.number}"
-                        // sh ''' docker build -t ${IMAGE_NAME}:${currentBuild.number} .'''
+                        // sh "docker build -t ${IMAGE_NAME}:${currentBuild.number} ."
+                        NEW_IMAGE_NAME = "${IMAGE_NAME}:${currentBuild.number}"
                     } else {
-                        // sh ''' docker build -t ${IMAGE_NAME}:${params.Image_Tag} .'''
+                        // sh "docker build -t ${IMAGE_NAME}:${params.Image_Tag} ."
                         echo "Parameter Value: ${params.Image_Tag}"
+                        NEW_IMAGE_NAME = "${IMAGE_NAME}:${params.Image_Tag}"
                     }
                 }
+            }
+        }
+        stage('IMAGE NAME TEST'){
+            steps{
+                echo "${NEW_IMAGE_NAME}"
             }
         }
         // stage('Trivy Scan') {
